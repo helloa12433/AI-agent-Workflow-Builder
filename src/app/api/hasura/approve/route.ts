@@ -70,7 +70,7 @@ export async function POST(req: Request) {
     }
 
     // Resume execution
-    executeRun(stepRun.workflow_run_id).catch(console.error);
+    await executeRun(stepRun.workflow_run_id).catch(console.error);
 
     return NextResponse.json({ success: true });
 

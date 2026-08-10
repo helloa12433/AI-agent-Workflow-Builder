@@ -60,8 +60,8 @@ export async function POST(req: Request) {
     const insertData: any = await runGraphQL(insertRunQuery, { workflowId: workflow_id });
     const runId = insertData.insert_workflow_runs_one.id;
 
-    // 4. Start execution async (do not await)
-    executeRun(runId).catch(console.error);
+    // 4. Start execution
+    await executeRun(runId).catch(console.error);
 
     return NextResponse.json({ run_id: runId, status: 'pending' });
 
