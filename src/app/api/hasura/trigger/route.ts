@@ -67,6 +67,6 @@ export async function POST(req: Request) {
 
   } catch (error: any) {
     console.error('Trigger error:', error);
-    return NextResponse.json({ message: "Internal server error", error: error?.toString(), stack: error?.stack }, { status: 500 });
+    return NextResponse.json({ message: error?.message || error?.toString() || "Internal server error", code: "action-failed" }, { status: 400 });
   }
 }
