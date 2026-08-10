@@ -12,7 +12,7 @@ import {
 } from "@apollo/client-integration-nextjs";
 
 function makeClient() {
-  const graphqlEndpoint = process.env.NEXT_PUBLIC_HASURA_GRAPHQL_ENDPOINT || 'http://localhost:8080/v1/graphql';
+  const graphqlEndpoint = process.env.NEXT_PUBLIC_HASURA_GRAPHQL_ENDPOINT || 'https://select-satyr-95.hasura.app/v1/graphql';
   const wsEndpoint = graphqlEndpoint.replace(/^http/, 'ws');
 
   const httpLink = new HttpLink({
