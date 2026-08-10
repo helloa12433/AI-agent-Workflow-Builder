@@ -10,7 +10,7 @@
   },
   "dependencies": {
     "@apollo/client": "^4.2.10",
-    "@apollo/experimental-nextjs-app-support": "^0.14.5",
+    "@apollo/client-integration-nextjs": "^0.14.5",
     "@google/genai": "^2.16.0",
     "dotenv": "^17.4.2",
     "graphql": "^16.14.2",
