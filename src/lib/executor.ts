@@ -125,10 +125,12 @@ export async function executeRun(runId: string) {
           
           if (process.env.GEMINI_API_KEY && process.env.GEMINI_API_KEY !== 'stub') {
             const dynamicAi = new GoogleGenAI({ apiKey: process.env.GEMINI_API_KEY });
+            console.log("Calling Gemini API with model gemini-1.5-flash...");
             const response = await dynamicAi.models.generateContent({
-                model: 'gemini-3.5-flash',
+                model: 'gemini-1.5-flash',
                 contents: inputPrompt
             });
+            console.log("Gemini API returned:", response.text);
             output = { text: response.text };
           } else {
             // stub with delay
@@ -141,6 +143,7 @@ export async function executeRun(runId: string) {
              url = 'https://jsonplaceholder.typicode.com/todos/1';
           }
           const method = step.config.method || 'GET';
+          console.log("Calling HTTP:", url);
           const res = await fetch(url, { method });
           if (!res.ok) {
             throw new Error(`HTTP Error: ${res.status} ${res.statusText}`);
