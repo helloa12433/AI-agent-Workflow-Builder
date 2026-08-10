@@ -1,0 +1,49 @@
+version: '3.8'
+
+services:
+  postgres:
+    image: postgres:15
+    restart: always
+    environment:
+      POSTGRES_PASSWORD: postgrespassword
+      POSTGRES_USER: postgres
+      POSTGRES_DB: postgres
+    ports:
+      - "5432:5432"
+    volumes:
+      - db_data:/var/lib/postgresql/data
+
+  graphql-engine:
+    image: hasura/graphql-engine:v2.36.0
+    ports:
+      - "8080:8080"
+    depends_on:
+      - postgres
+    restart: always
+    environment:
+      HASURA_GRAPHQL_DATABASE_URL: postgres://postgres:postgrespassword@postgres:5432/postgres
+      HASURA_GRAPHQL_ENABLE_CONSOLE: "true"
+      HASURA_GRAPHQL_DEV_MODE: "true"
+      HASURA_GRAPHQL_ENABLED_LOG_TYPES: startup, http-log, webhook-log, websocket-log, query-log
+      HASURA_GRAPHQL_ADMIN_SECRET: myadminsecretkey
+      HASURA_GRAPHQL_UNAUTHORIZED_ROLE: public
+      HASURA_GRAPHQL_JWT_SECRET: '{"type":"HS256","key":"this-is-a-very-long-secret-key-that-is-at-least-32-chars-long"}'
+
+  hasura-auth:
+    image: nhost/hasura-auth:latest
+    ports:
+      - "4000:4000"
+    environment:
+      AUTH_HOST: "0.0.0.0"
+      AUTH_PORT: "4000"
+      HASURA_GRAPHQL_GRAPHQL_URL: "http://graphql-engine:8080/v1/graphql"
+      HASURA_GRAPHQL_DATABASE_URL: "postgres://postgres:postgrespassword@postgres:5432/postgres"
+      HASURA_GRAPHQL_ADMIN_SECRET: "myadminsecretkey"
+      HASURA_GRAPHQL_JWT_SECRET: '{"type":"HS256","key":"this-is-a-very-long-secret-key-that-is-at-least-32-chars-long"}'
+      AUTH_LOG_LEVEL: "debug"
+    depends_on:
+      - graphql-engine
+      - postgres
+
+volumes:
+  db_data:

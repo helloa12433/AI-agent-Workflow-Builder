@@ -9,12 +9,23 @@
     "lint": "eslint"
   },
   "dependencies": {
+    "@apollo/client": "^4.2.10",
+    "@apollo/experimental-nextjs-app-support": "^0.14.5",
+    "@google/genai": "^2.16.0",
+    "dotenv": "^17.4.2",
+    "graphql": "^16.14.2",
+    "graphql-request": "^7.4.0",
+    "graphql-ws": "^6.2.1",
+    "jsonwebtoken": "^9.0.3",
+    "lucide-react": "^1.31.0",
     "next": "16.3.0",
     "react": "19.2.8",
-    "react-dom": "19.2.8"
+    "react-dom": "19.2.8",
+    "rxjs": "^7.8.2"
   },
   "devDependencies": {
     "@tailwindcss/postcss": "^4",
+    "@types/jsonwebtoken": "^9.0.10",
     "@types/node": "^20",
     "@types/react": "^19",
     "@types/react-dom": "^19",
