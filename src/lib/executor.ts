@@ -1,6 +1,5 @@
 import { runGraphQL } from './hasura';
 import { GoogleGenAI } from '@google/genai';
-import dotenv from 'dotenv';
 
 export async function executeRun(runId: string) {
   try {
@@ -116,9 +115,8 @@ export async function executeRun(runId: string) {
       try {
         let output: any = {};
         if (step.type === 'llm_call') {
-          // Force reload env to pick up user's new key without requiring server restart
-          const dotenvResult = dotenv.config({ path: '.env.local', override: true });
-          console.log("Dotenv Reload:", dotenvResult.parsed);
+          // In Vercel, environment variables are loaded automatically into process.env.
+          // console.log("Current GEMINI_API_KEY:", process.env.GEMINI_API_KEY);
           console.log("Current GEMINI_API_KEY:", process.env.GEMINI_API_KEY);
           
           const prompt = step.config.prompt || 'Hello';
