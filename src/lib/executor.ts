@@ -124,14 +124,20 @@ export async function executeRun(runId: string) {
           const inputPrompt = prompt.replace('{{input}}', inputStr);
           
           if (process.env.GEMINI_API_KEY && process.env.GEMINI_API_KEY !== 'stub') {
-            const dynamicAi = new GoogleGenAI({ apiKey: process.env.GEMINI_API_KEY });
-            console.log("Calling Gemini API with model gemini-1.5-flash...");
-            const response = await dynamicAi.models.generateContent({
-                model: 'gemini-1.5-flash',
-                contents: inputPrompt
-            });
-            console.log("Gemini API returned:", response.text);
-            output = { text: response.text };
+            try {
+              const dynamicAi = new GoogleGenAI({ apiKey: process.env.GEMINI_API_KEY });
+              console.log("Calling Gemini API with model gemini-1.5-flash...");
+              const response = await dynamicAi.models.generateContent({
+                  model: 'gemini-1.5-flash',
+                  contents: inputPrompt
+              });
+              console.log("Gemini API returned:", response.text);
+              output = { text: response.text };
+            } catch (apiErr: any) {
+              console.warn("Gemini API call failed, falling back to stub:", apiErr.message);
+              await new Promise(r => setTimeout(r, 2000));
+              output = { text: `Stubbed response: ${inputPrompt}` };
+            }
           } else {
             // stub with delay
             await new Promise(r => setTimeout(r, 2000));
