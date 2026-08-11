@@ -29,9 +29,11 @@ const GET_ORG_DATA = gql`
 `;
 
 export default function DashboardPage() {
-  const { data, loading, error } = useQuery(GET_ORG_DATA);
+  const { data, loading, error } = useQuery(GET_ORG_DATA, {
+    skip: typeof window === 'undefined'
+  });
 
-  if (loading) return <div>Loading dashboard...</div>;
+  if (loading || typeof window === 'undefined') return <div>Loading dashboard...</div>;
   if (error) return <div>Error loading data: {error.message}</div>;
 
   const membership = data?.org_members[0];

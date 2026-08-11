@@ -75,13 +75,13 @@ export default function WorkflowDetails({ params }: { params: Promise<{ id: stri
   const { id } = use(params);
   const [triggering, setTriggering] = useState(false);
   
-  const { data: wfData, loading: wfLoading } = useQuery(GET_WORKFLOW, { variables: { id } });
-  const { data: runData } = useSubscription(RUNS_SUBSCRIPTION, { variables: { workflowId: id } });
+  const { data: wfData, loading: wfLoading } = useQuery(GET_WORKFLOW, { variables: { id }, skip: typeof window === 'undefined' });
+  const { data: runData } = useSubscription(RUNS_SUBSCRIPTION, { variables: { workflowId: id }, skip: typeof window === 'undefined' });
   
   const [triggerRun] = useMutation(TRIGGER_WORKFLOW);
   const [approveStep] = useMutation(APPROVE_STEP);
 
-  if (wfLoading) return <div className="p-8">Loading workflow...</div>;
+  if (wfLoading || typeof window === 'undefined') return <div className="p-8">Loading workflow...</div>;
   const workflow = wfData?.workflows_by_pk;
   
   if (!workflow) return <div className="p-8 text-red-500">Workflow not found or access denied.</div>;

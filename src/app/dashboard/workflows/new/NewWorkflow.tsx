@@ -48,10 +48,10 @@ export default function NewWorkflowPage() {
   const [steps, setSteps] = useState<any[]>([]);
   const [saving, setSaving] = useState(false);
 
-  const { data: orgData, loading: orgLoading } = useQuery(GET_ORGS);
+  const { data: orgData, loading: orgLoading } = useQuery(GET_ORGS, { skip: typeof window === 'undefined' });
   const [createWorkflow] = useMutation(CREATE_WORKFLOW);
 
-  if (orgLoading) return <div className="p-8">Loading orgs...</div>;
+  if (orgLoading || typeof window === 'undefined') return <div className="p-8">Loading...</div>;
   
   const myOrg = orgData?.org_members[0];
   if (!myOrg || (myOrg.role !== 'owner' && myOrg.role !== 'editor')) {
