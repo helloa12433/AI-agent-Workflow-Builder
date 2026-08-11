@@ -41,8 +41,8 @@ Authentication is handled via a custom Next.js endpoint (`/api/auth/login`). It 
 Create a `.env.local` file in the root directory:
 ```env
 HASURA_GRAPHQL_ENDPOINT=http://localhost:8080/v1/graphql
-HASURA_ADMIN_SECRET=myadminsecretkey
-JWT_SECRET=this-is-a-very-long-secret-key-that-is-at-least-32-chars-long
+HASURA_ADMIN_SECRET=
+JWT_SECRET=
 GEMINI_API_KEY=your-gemini-api-key # Optional, falls back to stub responses if "stub"
 ```
 *(Never expose actual secrets in source control. The values above correspond to the local docker-compose environment).*
