@@ -67,7 +67,7 @@ GEMINI_API_KEY=your-gemini-api-key # Optional, falls back to stub responses if "
 5. Open [http://localhost:3000](http://localhost:3000)
 
 ## How to Test the Final Scenario
-1. **Login**: Sign in as the seeded user `orga-owner@test.com` or `orgb-owner@test.com`.
+1. **Login**: Sign in as the seeded user `orga-owner@test.com`.
 2. **Explore**: Notice that you only see Org A's workflows. You are securely isolated from Org B.
 3. **Run Workflow**: Trigger a workflow manually via the UI.
 4. **Live Subscription**: Observe the real-time status updates as steps execute.
