@@ -100,36 +100,22 @@ export default function NewWorkflowPage() {
     try {
       setSaving(true);
       console.log("Submitting workflow:", { orgId: myOrg.org_id, name, description, steps: parsedSteps, triggers: [{ type: triggerType, config: {} }] });
-      const token = localStorage.getItem('token');
-      const res = await fetch(process.env.NEXT_PUBLIC_HASURA_GRAPHQL_ENDPOINT || 'http://localhost:8080/v1/graphql', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          ...(token ? { 'Authorization': `Bearer ${token}` } : {})
-        },
-        body: JSON.stringify({
-          query: CREATE_WORKFLOW.loc?.source.body,
-          variables: {
-            orgId: myOrg.org_id,
-            name,
-            description,
-            steps: parsedSteps,
-            triggers: [{ type: triggerType, config: {} }]
-          }
-        })
+      
+      const { data } = await createWorkflow({
+        variables: {
+          orgId: myOrg.org_id,
+          name,
+          description,
+          steps: parsedSteps,
+          triggers: [{ type: triggerType, config: {} }]
+        }
       });
       
-      const data = await res.json();
-      console.log("Mutation response:", data);
-      
-      if (data.errors && data.errors.length > 0) {
-        throw new Error(data.errors[0].message);
-      }
-      if (!data.data || !data.data.insert_workflows_one) {
+      if (!data || !data.insert_workflows_one) {
         throw new Error("No data returned from mutation");
       }
-      console.log("Pushing router to:", `/dashboard/workflows/${data.data.insert_workflows_one.id}`);
-      router.push(`/dashboard/workflows/${data.data.insert_workflows_one.id}`);
+      console.log("Pushing router to:", `/dashboard/workflows/${data.insert_workflows_one.id}`);
+      router.push(`/dashboard/workflows/${data.insert_workflows_one.id}`);
     } catch (err: any) {
       console.error("Save Error:", err);
       alert("Failed to save workflow: " + err.message);
