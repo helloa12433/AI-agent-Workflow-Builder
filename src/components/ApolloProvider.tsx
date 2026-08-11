@@ -10,6 +10,7 @@ import {
   ApolloClient,
   InMemoryCache,
 } from "@apollo/client-integration-nextjs";
+import { useEffect, useState } from 'react';
 
 function makeClient() {
   const graphqlEndpoint = process.env.NEXT_PUBLIC_HASURA_GRAPHQL_ENDPOINT || 'https://select-satyr-95.hasura.app/v1/graphql';
@@ -23,11 +24,13 @@ function makeClient() {
     // Only run localStorage on client
     if (typeof window !== 'undefined') {
       const token = localStorage.getItem('token');
-      return {
-        headers: {
-          ...headers,
-          authorization: token ? `Bearer ${token}` : "",
-        }
+      if (token) {
+        return {
+          headers: {
+            ...headers,
+            Authorization: `Bearer ${token}`
+          }
+        };
       }
     }
     return { headers };
@@ -40,11 +43,14 @@ function makeClient() {
       url: wsEndpoint,
       connectionParams: () => {
         const token = localStorage.getItem('token');
-        return {
-          headers: {
-            Authorization: token ? `Bearer ${token}` : "",
-          }
-        };
+        if (token) {
+          return {
+            headers: {
+              Authorization: `Bearer ${token}`
+            }
+          };
+        }
+        return {};
       }
     }));
 
@@ -70,6 +76,13 @@ function makeClient() {
 }
 
 export default function ApolloProvider({ children }: { children: React.ReactNode }) {
+  const [mounted, setMounted] = useState(false);
+  useEffect(() => setMounted(true), []);
+
+  if (!mounted) {
+    return <>{children}</>;
+  }
+
   return (
     <ApolloNextAppProvider makeClient={makeClient}>
       {children}
